@@ -1,0 +1,14 @@
+*.html
+*.pdf
+.DS_Store
+.devcontainer
+.coverage
+__pycache__
+.ipynb_checkpoints
+.pytest_cache
+.tox
+*.egg-info
+build
+dist
+.venv
+*.mp4
