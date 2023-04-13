@@ -12,3 +12,5 @@ build
 dist
 .venv
 *.mp4
+*.png
+*.wav
