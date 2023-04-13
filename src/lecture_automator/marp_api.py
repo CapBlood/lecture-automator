@@ -18,13 +18,13 @@ def generate_marp_slides(outdir: str, md_text: str, type_images: str = 'png') ->
             file.write(md_text)
 
         subprocess.run(
-            ['marp', '--images', type_images, '-o', 'Slide.png', path_to_md],
+            ['marp', '--images', type_images, '--image-scale', '2', '-o', 'Slide.png', path_to_md],
             cwd=outdir
         )
 
 
 if __name__ == '__main__':
-    with open('examples/Example_2.md') as file:
+    with open('examples/Example.md') as file:
         text = file.read()
 
     generate_marp_slides('examples', text)
