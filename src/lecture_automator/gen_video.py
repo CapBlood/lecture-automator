@@ -21,18 +21,21 @@ def generate_video(path_images: List[str], path_wavs: List[str], output_name: st
         files.extend([ffmpeg.input(path_image), ffmpeg.input(path_wav)])
 
     joined = ffmpeg.concat(*files, v=1, a=1).node
-    ffmpeg.output(joined[0], joined[1], output_name).run(overwrite_output=True)
+    ffmpeg.output(
+        joined[0], joined[1], output_name, 
+        f='mp4', vcodec='libx264', acodec='aac'
+    ).run(overwrite_output=True)
 
 
 if __name__ == '__main__':
     # with open('examples/Example_2.md') as file:
     #     md_text = file.read()
     # generate_marp_slides("examples", md_text)
-    path_to_image = "/Users/donsangre/PycharmProjects/lecture-automator/examples/Slide.001.png"
-    path_to_image_2 = "/Users/donsangre/PycharmProjects/lecture-automator/examples/Slide.002.png"
+    path_to_image = "/Users/donsangre/PycharmProjects/lecture-automator/examples/Example.001.png"
+    path_to_image_2 = "/Users/donsangre/PycharmProjects/lecture-automator/examples/Example.002.png"
     path_to_audio = "/Users/donsangre/PycharmProjects/lecture-automator/examples/Example.wav"
 
-    generate_video([path_to_image, path_to_image_2], [path_to_audio, path_to_audio], 'output2.mp4')
+    generate_video([path_to_image, path_to_image_2], [path_to_audio, path_to_audio], 'examples/output.mp4')
 
     # input_still = ffmpeg.input(path_to_image)
     # input_audio = ffmpeg.input("/Users/donsangre/PycharmProjects/lecture-automator/examples/Example.wav")
