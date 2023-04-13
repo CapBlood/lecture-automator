@@ -40,6 +40,11 @@ print(a * b)
 lecture-automator Example.md Example.mp4
 ```
 
+Пример сгенерированного видео:
+
+[Example.webm](https://user-images.githubusercontent.com/33065236/231875817-1d3aae09-2a63-4bb1-8380-8b7f024bbe45.webm)
+
+
 ### Управляющие конструкции 
 
 На данный момент реализованы следующий управляющие конструкции:
