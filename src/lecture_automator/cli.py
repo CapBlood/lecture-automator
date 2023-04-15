@@ -11,13 +11,31 @@ from lecture_automator.gen_video import generate_video
 
 
 @click.command()
-@click.argument('input_md', type=click.STRING)
-@click.argument('out_path', type=click.STRING)
-def convert_md_to_mp4(input_md, out_path):
+@click.argument(
+    'input_md', 
+    type=click.STRING,
+    help='Путь к Markdown-файлу.'
+)
+@click.argument(
+    'out_path', 
+    type=click.STRING,
+    help='Выходной путь для генерируемого изображения.'
+)
+@click.option(
+    '--scale', 
+    type=click.FLOAT, 
+    default=1.5, 
+    help=(
+        'Коэффициент масштабирования генерируемого видео, '
+        'по умолчанию равен 1.5, что соответствует разрешению 1920x1080,'
+        'значение 1 соответствует разрешению 1280x720.'
+    )
+)
+def convert_md_to_mp4(input_md, out_path, scale):
     md_data = parse_md(input_md)
 
     with tempfile.TemporaryDirectory() as tmpdirname:
-        generate_marp_slides(tmpdirname, md_data['md_text'])
+        generate_marp_slides(tmpdirname, md_data['md_text'], scale=scale)
         slide_images = glob.glob(os.path.join(tmpdirname, 'Slide.*'))
         audio_paths = texts_to_speeches(md_data['speech'], tmpdirname)
         generate_video(slide_images, audio_paths, out_path)
