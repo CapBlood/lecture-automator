@@ -73,6 +73,9 @@ def process_commands(slides: List[str]) -> Tuple[list, dict]:
                 slide[end_pos:]
             )
 
+        if 'speech' not in metadata[idx]:
+            raise Exception('Каждый слайд должен иметь описание речи.')
+
         processed_slides.append(slide)
 
     return processed_slides, metadata

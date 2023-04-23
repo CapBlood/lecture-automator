@@ -1,5 +1,7 @@
 from lecture_automator.parser import parse_slides, join_slides, process_commands
 
+import pytest
+
 
 def test_join_slides():
     text = (
@@ -256,4 +258,24 @@ def test_process_commands():
 
     assert expected_slides == processed_slides
     assert expected_metadata == metadata
+
+def test_process_commands():
+    slides = [
+        (
+            "#Markdown Presentation Ecosystem\n"
+            "\n"
+            "Lin-e\n"
+            "\n"
+            "\n"
+        ),
+        (
+            "\n"
+            "# Slide\n"
+            "Something\n"
+            "/speech{Something}"
+        )
+    ]
+    
+    with pytest.raises(Exception):
+        processed_slides, metadata = process_commands(slides)
 
