@@ -12,4 +12,4 @@ Markdown Presentation Ecosystem
 
 https://marp.app/
 
-
+/speech{Это пример презентации Марп с метаданными.}
