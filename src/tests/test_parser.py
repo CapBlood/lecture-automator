@@ -1,56 +1,259 @@
-from lecture_automator.parser import parse_speech, preprocess_md_marp
+from lecture_automator.parser import parse_slides, join_slides, process_commands
 
 
-def test_parse_speech():
+def test_join_slides():
     text = (
-        "#Markdown Presentation Ecosystem"
+        "#Markdown Presentation Ecosystem\n"
         "\n"
-        "Lin-e"
-        "/speech{It's a speech}"
+        "Lin-e\n"
+        "/speech{It's a speech}\n"
         "\n"
-        "---"
+        "---\n"
         "\n"
-        "# Slide"
-        "Something"
+        "# Slide\n"
+        "Something\n"
         "/speech{Something}"
     )
-
-    expected_metadata = [
-        "It's a speech",
-        'Something'
+    slides = [
+        (
+            "#Markdown Presentation Ecosystem\n"
+            "\n"
+            "Lin-e\n"
+            "/speech{It's a speech}\n"
+            "\n"
+        ),
+        (
+            "\n"
+            "# Slide\n"
+            "Something\n"
+            "/speech{Something}"
+        )
     ]
 
-    metadata = parse_speech(text)
+    assert join_slides(slides) == text
 
+
+def test_join_slides_2():
+    text = (
+        "---\n"
+        "theme: gaia\n"
+        "_class: lead\n"
+        "paginate: true\n"
+        "backgroundColor: #fff\n"
+        "backgroundImage: url('https://marp.app/assets/hero-background.svg')\n"
+        "---\n"
+        "\n"
+        "# Python\n"
+        "\n"
+        "```\n"
+        "print('Привет, мир')\n"
+        "/speech{sdfsdf}\n"
+        "```\n"
+        "\n"
+        "/speech{На этом слайде представлена простейшая программа, написанная на языке програмирования Пайтон. Эта программа просто выводит указанные слова в терминал.}\n"
+        "\n"
+        "---\n"
+        "\n"
+        "# Python\n"
+        "\n"
+        "```\n"
+        "a = 2\n"
+        "b = 4\n"
+        "print(a * b)\n"
+        "```\n"
+        "\n"
+        "/speech{А здесь представлена другая программа, которая умножает число два на число четыре.}\n"
+        "\n"
+    )
+    metaslide = (
+        "theme: gaia\n"
+        "_class: lead\n"
+        "paginate: true\n"
+        "backgroundColor: #fff\n"
+        "backgroundImage: url('https://marp.app/assets/hero-background.svg')\n"
+    )
+    slides = [
+        (
+            "\n"
+            "# Python\n"
+            "\n"
+            "```\n"
+            "print('Привет, мир')\n"
+            "/speech{sdfsdf}\n"
+            "```\n"
+            "\n"
+            "/speech{На этом слайде представлена простейшая программа, написанная на языке програмирования Пайтон. Эта программа просто выводит указанные слова в терминал.}\n"
+            "\n"
+        ),
+        (
+            "\n"
+            "# Python\n"
+            "\n"
+            "```\n"
+            "a = 2\n"
+            "b = 4\n"
+            "print(a * b)\n"
+            "```\n"
+            "\n"
+            "/speech{А здесь представлена другая программа, которая умножает число два на число четыре.}\n"
+            "\n"
+        )
+    ]
+
+    assert join_slides(slides, metaslide=metaslide) == text
+
+
+
+def test_parse_slides():
+    text = (
+        "---\n"
+        "theme: gaia\n"
+        "_class: lead\n"
+        "paginate: true\n"
+        "backgroundColor: #fff\n"
+        "backgroundImage: url('https://marp.app/assets/hero-background.svg')\n"
+        "---\n"
+        "\n"
+        "# Python\n"
+        "\n"
+        "```\n"
+        "print('Привет, мир')\n"
+        "/speech{sdfsdf}\n"
+        "```\n"
+        "\n"
+        "/speech{На этом слайде представлена простейшая программа, написанная на языке програмирования Пайтон. Эта программа просто выводит указанные слова в терминал.}\n"
+        "\n"
+        "---\n"
+        "\n"
+        "# Python\n"
+        "\n"
+        "```\n"
+        "a = 2\n"
+        "b = 4\n"
+        "print(a * b)\n"
+        "```\n"
+        "\n"
+        "/speech{А здесь представлена другая программа, которая умножает число два на число четыре.}\n"
+        "\n"
+    )
+    expected_slides = [
+        (
+            "\n"
+            "# Python\n"
+            "\n"
+            "```\n"
+            "print('Привет, мир')\n"
+            "/speech{sdfsdf}\n"
+            "```\n"
+            "\n"
+            "/speech{На этом слайде представлена простейшая программа, написанная на языке програмирования Пайтон. Эта программа просто выводит указанные слова в терминал.}\n"
+            "\n"
+        ),
+        (
+            "\n"
+            "# Python\n"
+            "\n"
+            "```\n"
+            "a = 2\n"
+            "b = 4\n"
+            "print(a * b)\n"
+            "```\n"
+            "\n"
+            "/speech{А здесь представлена другая программа, которая умножает число два на число четыре.}\n"
+            "\n"
+        )
+    ]
+    expected_metaslide = (
+        "theme: gaia\n"
+        "_class: lead\n"
+        "paginate: true\n"
+        "backgroundColor: #fff\n"
+        "backgroundImage: url('https://marp.app/assets/hero-background.svg')\n"
+    )
+
+    metaslide, slides = parse_slides(text)
+
+    assert slides == expected_slides
+    assert metaslide == expected_metaslide
+
+
+def test_parse_slides_2():
+    text = (
+        "#Markdown Presentation Ecosystem\n"
+        "\n"
+        "Lin-e\n"
+        "/speech{It's a speech}\n"
+        "\n"
+        "---\n"
+        "\n"
+        "# Slide\n"
+        "Something\n"
+        "/speech{Something}"
+    )
+    expected_slides = [
+        (
+            "#Markdown Presentation Ecosystem\n"
+            "\n"
+            "Lin-e\n"
+            "/speech{It's a speech}\n"
+            "\n"
+        ),
+        (
+            "\n"
+            "# Slide\n"
+            "Something\n"
+            "/speech{Something}"
+        )
+    ]
+    expected_metaslide = None
+
+    metaslide, slides = parse_slides(text)
+
+    assert slides == expected_slides
+    assert metaslide == expected_metaslide
+
+
+def test_process_commands():
+    slides = [
+        (
+            "#Markdown Presentation Ecosystem\n"
+            "\n"
+            "Lin-e\n"
+            "/speech{It's a speech}\n"
+            "\n"
+        ),
+        (
+            "\n"
+            "# Slide\n"
+            "Something\n"
+            "/speech{Something}"
+        )
+    ]
+    expected_slides = [
+        (
+            "#Markdown Presentation Ecosystem\n"
+            "\n"
+            "Lin-e\n"
+            "\n"
+            "\n"
+        ),
+        (
+            "\n"
+            "# Slide\n"
+            "Something\n"
+        )
+    ]
+    expected_metadata = {
+        1: {
+            'speech': "It's a speech"
+        },
+        2: {
+            'speech': "Something"
+        }
+    }
+    
+    processed_slides, metadata = process_commands(slides)
+
+    assert expected_slides == processed_slides
     assert expected_metadata == metadata
 
-
-def test_preprocess_md_marp():
-    text = """#Markdown Presentation Ecosystem
-    
-    Lin-e
-    
-    /speech{It's a speech}
-    
-    ---
-    
-    # Slide
-    
-    Something
-    """
-    expected_preprocessed = """#Markdown Presentation Ecosystem
-    
-    Lin-e
-    
-    
-    
-    ---
-    
-    # Slide
-    
-    Something
-    """
-
-    preprocessed_md_marp = preprocess_md_marp(text)
-
-    assert preprocessed_md_marp == expected_preprocessed

@@ -1,51 +1,113 @@
 import re
+from typing import List, Dict, Tuple
+
+from lecture_automator.command_handler import CommandHandler
 
 
-def preprocess_md_marp(text: str) -> str:
-    """Предобработка текста Markdown перед использованием в Marp. Производит удаление
-    управляющих команд (/speech и т.п.).
+def join_slides(slides: List[str], metaslide=None):
+    md_text = '---\n'.join(slides)
+    if metaslide:
+        metaslide = '---\n{}---\n'.format(metaslide)
+        md_text = '{}{}'.format(metaslide, md_text)
+        
+    return md_text
+
+
+def parse_commands(slide: str) -> List[Tuple[str, str, int, int]]:
+    """Парсинг управляющих конструкций для каждого слайда в презентации Markdown.
 
     Args:
-        text (str): текст для предобработки.
+        slide (str): текст слайда Markdown.
 
     Returns:
-        str: предобработанный текст.
+        List[Tuple[str, str, int, int]]: список кортежей 
+            (название команды, ее аргумент, 
+            начальная позиция в файле, конечная позиция в файле).
     """
 
-    text = re.sub(r'/[a-z]+ *\{[^\{\}]+\}', '', text)
-    return text
+    commands = []
+    p = re.compile(r'/([a-z]+) *\{([^\{\}]+)\}')
+
+    for match in p.finditer(slide):
+        name_command = match.group(1)
+        arg = match.group(2)
+        start_pos = match.start()
+        end_pos = match.end()
+
+        if len(re.findall(r'(?m)\`{3}', slide[:start_pos])) % 2 != 0:
+            continue
+        
+        commands.append(
+            (name_command, arg, start_pos, end_pos)
+        )
+
+    return commands
 
 
-def parse_speech(text: str) -> dict:
-    """Парсинг речи для каждого слайда в презентации Markdown.
+def process_commands(slides: List[str]) -> Tuple[list, dict]:
+    """Обработка управляющих конструкций.
+
+    Args:
+        slides (List[str]): список текстов слайдов Markdown.
+
+    Returns:
+        Tuple[str, dict]: кортеж (список обработанных текстов Markdown для каждого слайда, словарь метаданных для каждого слайда).
+    """
+    
+    metadata = dict()
+    processed_slides = []
+    for idx, slide in enumerate(slides, start=1):
+        metadata[idx] = dict()
+        parsed_commands = parse_commands(slide)
+
+        for name_command, arg, start_pos, end_pos in parsed_commands:
+            command_replacer = CommandHandler.process(
+                slide, name_command,
+                arg, start_pos,
+                end_pos, metadata[idx]
+            )
+
+            slide = "{}{}{}".format(
+                slide[:start_pos], 
+                command_replacer, 
+                slide[end_pos:]
+            )
+
+        processed_slides.append(slide)
+
+    return processed_slides, metadata
+
+
+def parse_slides(text: str) -> tuple:
+    """Парсинг слайдов.
 
     Args:
         text (str): текст Markdown.
 
     Returns:
-        dict: словарь с метаданными слайдов (речи для каждого из слайдов) вида `{1: 'Первая речь', 2: 'Вторая речь'}` (нумерация слайдов с 1).
+        tuple: метаданные презентации, список текстов слайдов.
     """
 
-    text = re.sub(r'(?m)\`{3}[^\`]+\`{3}', '', text)
+    metaslide = None
     slides = re.split(r'(?m)^\-{3}\n', text)
+    if slides[0] == '':
+        metaslide = slides[1]
+        slides = slides[2:]
 
-    speeches = list()
-    for slide in slides:
-        r = re.findall(r'/speech *\{([А-Яа-яA-Za-z \S]+)\}', slide)
+    # Обработка случаев, когда "---" находится во вложенных строках.
+    idx = 0
+    while True:
+        if len(re.findall(r'(?m)\`{3}', slides[idx])) % 2 != 0:
+            next_slide = slides.pop(idx + 1)
+            slides[idx] = '{}---\n{}'.format(slides[idx], next_slide)
+            continue
 
-        if len(r) == 0:
-            raise Exception(
-                'Каждый слайд должен иметь описание речи слайда!'
-            )
-        if len(r) > 1:
-            raise Exception(
-                'Каждый слайд должен иметь только одно описание речи слайда!'
-            )
-        speeches.append(r[0])
+        if idx == len(slides) - 1:
+            break
 
-    return speeches
+        idx += 1
 
-
+    return metaslide, slides
 
 def parse_md(path: str) -> dict:
     """Парсинг Markdown презентации формата Marp с дополнительными управляющими командами (/speech и т.д.)
@@ -60,16 +122,20 @@ def parse_md(path: str) -> dict:
     with open(path) as file:
         md_text = file.read()
 
-    preprocessed_marp_text = preprocess_md_marp(md_text)
-    speech_metadata = parse_speech(md_text)
+    metaslide, slides = parse_slides(md_text)
+    processed_slides, metadata = process_commands(slides)
+    processed_marp_text = join_slides(processed_slides, metaslide=metaslide)
+
+    speech_metadata = [metadata[slide]['speech'] for slide in metadata]
 
     return {
-        'md_text': preprocessed_marp_text,
+        'md_text': processed_marp_text,
         'speech': speech_metadata
     }
 
     
 if __name__ == '__main__':
     res = parse_md("examples/Example.md")
+    print(res)
     # print(res['md_text'])
-    print(res['speech'])
+    # print(res['speech'])
