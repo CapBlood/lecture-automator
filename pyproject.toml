@@ -3,6 +3,8 @@ name = "lecture-automator"
 version = "0.2.0"
 description = ""
 authors = ["CapBlood <stalker.anonim@mail.ru>"]
+readme = "README.md"
+homepage = "https://github.com/CapBlood/lecture-automator.git"
 
 [tool.poetry.dependencies]
 python = "^3.8"
