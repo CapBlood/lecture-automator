@@ -14,12 +14,10 @@ from lecture_automator.gen_video import generate_video
 @click.argument(
     'input_md', 
     type=click.STRING,
-    help='Путь к Markdown-файлу.'
 )
 @click.argument(
     'out_path', 
     type=click.STRING,
-    help='Выходной путь для генерируемого изображения.'
 )
 @click.option(
     '--scale', 
