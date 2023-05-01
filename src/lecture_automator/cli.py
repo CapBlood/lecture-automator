@@ -6,7 +6,7 @@ import click
 
 from lecture_automator.parser import parse_md
 from lecture_automator.marp_api import generate_marp_slides
-from lecture_automator.gen_speech import texts_to_speeches
+from lecture_automator.gen_speech.gen_speech import texts_to_speeches
 from lecture_automator.gen_video import generate_video
 
 
