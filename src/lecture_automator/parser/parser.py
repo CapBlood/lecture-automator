@@ -1,7 +1,8 @@
 import re
 from typing import List, Tuple
 
-from lecture_automator.command_handler import CommandHandler
+from lecture_automator.parser.command_handler import CommandHandler
+from lecture_automator.parser.exceptions import SpeechNotFound
 
 
 def join_slides(slides: List[str], metaslide=None):
@@ -75,7 +76,7 @@ def process_commands(slides: List[str]) -> Tuple[list, dict]:
             )
 
         if 'speech' not in metadata[idx]:
-            raise Exception('Каждый слайд должен иметь описание речи.')
+            raise SpeechNotFound('Каждый слайд должен иметь описание речи.')
 
         processed_slides.append(slide)
 
