@@ -1,10 +1,6 @@
-import os
-import tempfile
 from typing import List
 
 import ffmpeg
-
-from lecture_automator.marp_api import generate_marp_slides
 
 
 def generate_video(path_images: List[str], path_wavs: List[str], output_name: str) -> None:
