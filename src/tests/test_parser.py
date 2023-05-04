@@ -258,7 +258,7 @@ def test_process_commands():
     assert expected_slides == processed_slides
     assert expected_metadata == metadata
 
-def test_process_commands():
+def test_process_commands_2():
     slides = [
         (
             "#Markdown Presentation Ecosystem\n"
