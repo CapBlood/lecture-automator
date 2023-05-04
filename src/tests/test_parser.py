@@ -1,4 +1,5 @@
 import pytest
+from lecture_automator.gen_speech.exceptions import DivideTextError
 from lecture_automator.parser import join_slides, parse_slides, process_commands
 
 
@@ -275,6 +276,6 @@ def test_process_commands_2():
         )
     ]
 
-    with pytest.raises(Exception):
-        processed_slides, metadata = process_commands(slides)
+    with pytest.raises(DivideTextError):
+        _, _ = process_commands(slides)
 
