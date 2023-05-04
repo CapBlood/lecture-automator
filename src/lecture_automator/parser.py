@@ -51,7 +51,8 @@ def process_commands(slides: List[str]) -> Tuple[list, dict]:
         slides (List[str]): список текстов слайдов Markdown.
 
     Returns:
-        Tuple[str, dict]: кортеж (список обработанных текстов Markdown для каждого слайда, словарь метаданных для каждого слайда).
+        Tuple[str, dict]: кортеж (список обработанных текстов Markdown для каждого
+            слайда, словарь метаданных для каждого слайда).
     """
 
     metadata = dict()
@@ -113,13 +114,15 @@ def parse_slides(text: str) -> tuple:
     return metaslide, slides
 
 def parse_md(path: str) -> dict:
-    """Парсинг Markdown презентации формата Marp с дополнительными управляющими командами (/speech и т.д.)
+    """Парсинг Markdown презентации формата Marp с дополнительными управляющими
+    командами (/speech и т.д.)
 
     Args:
         path (str): путь к файлу Markdown.
 
     Returns:
-        dict: словарь, содержащий текст Markdown для Marp (с удаленными управляющими командами) и метаданные.
+        dict: словарь, содержащий текст Markdown для Marp
+            (с удаленными управляющими командами) и метаданные.
     """
 
     with open(path) as file:
