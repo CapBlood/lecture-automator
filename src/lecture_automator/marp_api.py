@@ -1,6 +1,6 @@
+import os
 import subprocess
 import tempfile
-import os
 
 
 def generate_marp_slides(outdir: str, md_text: str, type_images: str = 'png', scale: float = 2.0) -> None:

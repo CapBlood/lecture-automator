@@ -1,5 +1,5 @@
 import re
-from typing import List, Dict, Tuple
+from typing import Dict, List, Tuple
 
 from lecture_automator.command_handler import CommandHandler
 
@@ -9,7 +9,7 @@ def join_slides(slides: List[str], metaslide=None):
     if metaslide:
         metaslide = '---\n{}---\n'.format(metaslide)
         md_text = '{}{}'.format(metaslide, md_text)
-        
+
     return md_text
 
 
@@ -20,8 +20,8 @@ def parse_commands(slide: str) -> List[Tuple[str, str, int, int]]:
         slide (str): текст слайда Markdown.
 
     Returns:
-        List[Tuple[str, str, int, int]]: список кортежей 
-            (название команды, ее аргумент, 
+        List[Tuple[str, str, int, int]]: список кортежей
+            (название команды, ее аргумент,
             начальная позиция в файле, конечная позиция в файле).
     """
 
@@ -36,7 +36,7 @@ def parse_commands(slide: str) -> List[Tuple[str, str, int, int]]:
 
         if len(re.findall(r'(?m)\`{3}', slide[:start_pos])) % 2 != 0:
             continue
-        
+
         commands.append(
             (name_command, arg, start_pos, end_pos)
         )
@@ -53,7 +53,7 @@ def process_commands(slides: List[str]) -> Tuple[list, dict]:
     Returns:
         Tuple[str, dict]: кортеж (список обработанных текстов Markdown для каждого слайда, словарь метаданных для каждого слайда).
     """
-    
+
     metadata = dict()
     processed_slides = []
     for idx, slide in enumerate(slides, start=1):
@@ -68,8 +68,8 @@ def process_commands(slides: List[str]) -> Tuple[list, dict]:
             )
 
             slide = "{}{}{}".format(
-                slide[:start_pos], 
-                command_replacer, 
+                slide[:start_pos],
+                command_replacer,
                 slide[end_pos:]
             )
 
@@ -136,7 +136,7 @@ def parse_md(path: str) -> dict:
         'speech': speech_metadata
     }
 
-    
+
 if __name__ == '__main__':
     res = parse_md("examples/Example.md")
     print(res)

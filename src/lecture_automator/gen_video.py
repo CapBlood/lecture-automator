@@ -1,5 +1,5 @@
-import tempfile
 import os
+import tempfile
 from typing import List
 
 import ffmpeg
@@ -22,7 +22,7 @@ def generate_video(path_images: List[str], path_wavs: List[str], output_name: st
 
     joined = ffmpeg.concat(*files, v=1, a=1).node
     ffmpeg.output(
-        joined[0], joined[1], output_name, 
+        joined[0], joined[1], output_name,
         f='mp4', vcodec='libx264', acodec='aac'
     ).run(overwrite_output=True)
 
