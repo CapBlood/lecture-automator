@@ -3,12 +3,14 @@ from typing import List
 import ffmpeg
 
 
-def generate_video(path_images: List[str], path_wavs: List[str], output_name: str) -> None:
+def generate_video(path_images: List[str],
+                   path_wavs: List[str], output_name: str) -> None:
     """Генерация видео на основе изображений и звука к каждому из них.
 
     Args:
         path_images (List[str]): список путей к изображениям в файловой системе.
-        path_wavs (List[str]): список путей к звукам в файловой системе (каждый звук соответствует изображению с таким же индексом).
+        path_wavs (List[str]): список путей к звукам в файловой системе (каждый звук
+        соответствует изображению с таким же индексом).
         output_name (str): название выходного видео.
     """
 
