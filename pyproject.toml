@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lecture-automator"
-version = "0.2.1"
+version = "1.0.0"
 description = ""
 authors = ["CapBlood <stalker.anonim@mail.ru>"]
 readme = "README.md"
