@@ -49,7 +49,7 @@ exclude_lines = ["pragma: no cover", "raise NotImplementedError"]
 
 # консольные утилиты
 [tool.poetry.scripts]
-lecture-automator = "lecture_automator.cli:convert_md_to_mp4"
+lecture-automator = "lecture_automator.cli:cli"
 
 
 [tool.ruff]
