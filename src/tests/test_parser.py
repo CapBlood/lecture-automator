@@ -1,6 +1,6 @@
-from lecture_automator.parser import parse_slides, join_slides, process_commands
-
 import pytest
+from lecture_automator.parser.exceptions import SpeechNotFound
+from lecture_automator.parser.parser import join_slides, parse_slides, process_commands
 
 
 def test_join_slides():
@@ -253,13 +253,13 @@ def test_process_commands():
             'speech': "Something"
         }
     }
-    
+
     processed_slides, metadata = process_commands(slides)
 
     assert expected_slides == processed_slides
     assert expected_metadata == metadata
 
-def test_process_commands():
+def test_process_commands_2():
     slides = [
         (
             "#Markdown Presentation Ecosystem\n"
@@ -275,7 +275,7 @@ def test_process_commands():
             "/speech{Something}"
         )
     ]
-    
-    with pytest.raises(Exception):
-        processed_slides, metadata = process_commands(slides)
+
+    with pytest.raises(SpeechNotFound):
+        _, _ = process_commands(slides)
 

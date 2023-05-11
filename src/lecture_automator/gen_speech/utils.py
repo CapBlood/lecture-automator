@@ -1,13 +1,15 @@
 import re
-from typing import List
 import wave
+from typing import List
 
 
 def divide_text(text: str, max_length: int = 1000) -> List[str]:
-    """Разделение текста по точкам таким образом, чтобы каждая часть текста не превышала указанный максимум.
+    """Разделение текста по точкам таким образом, чтобы каждая часть текста не превышала
+    указанный максимум.
     Args:
         text (str): текст для разделения.
-        max_length (int, optional): максимальная длина одной части текста. Defaults to 1000.
+        max_length (int, optional): максимальная длина одной части текста. Defaults to
+            1000.
     Raises:
         Exception: _description_
     Returns:
