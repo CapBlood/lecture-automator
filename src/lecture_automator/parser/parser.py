@@ -114,7 +114,7 @@ def parse_slides(text: str) -> tuple:
 
     return metaslide, slides
 
-def parse_md(path: str) -> dict:
+def parse_md(md_text: str) -> dict:
     """Парсинг Markdown презентации формата Marp с дополнительными управляющими
     командами (/speech и т.д.)
 
@@ -126,9 +126,6 @@ def parse_md(path: str) -> dict:
             (с удаленными управляющими командами) и метаданные.
     """
 
-    with open(path) as file:
-        md_text = file.read()
-
     metaslide, slides = parse_slides(md_text)
     processed_slides, metadata = process_commands(slides)
     processed_marp_text = join_slides(processed_slides, metaslide=metaslide)
@@ -139,10 +136,3 @@ def parse_md(path: str) -> dict:
         'md_text': processed_marp_text,
         'speech': speech_metadata
     }
-
-
-if __name__ == '__main__':
-    res = parse_md("examples/Example.md")
-    print(res)
-    # print(res['md_text'])
-    # print(res['speech'])
