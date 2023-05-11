@@ -1,9 +1,15 @@
 import click
 
 from lecture_automator.compiler import compile_text_md
+from lecture_automator.web import run_web
 
 
-@click.command()
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
 @click.argument(
     'input_md',
     type=click.STRING,
@@ -30,7 +36,7 @@ from lecture_automator.compiler import compile_text_md
         'значение 1 соответствует разрешению 1280x720.'
     )
 )
-def convert_md_to_mp4(input_md, out_path, scale, vformat):
+def convert(input_md, out_path, scale, vformat):
     with open(input_md) as file:
         md_text = file.read()
 
@@ -40,5 +46,10 @@ def convert_md_to_mp4(input_md, out_path, scale, vformat):
     )
 
 
+@cli.command()
+def web():
+    run_web()
+
+
 if __name__ == '__main__':
-    convert_md_to_mp4()
+    cli()
