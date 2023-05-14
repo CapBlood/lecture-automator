@@ -21,7 +21,6 @@ class CommandHandler(ABC):
 class SpeechHandler(CommandHandler):
     def handle(self, slide, name_command, arg, start_pos, end_pos, metadata) -> str:
         if name_command == 'speech':
-            print(slide[end_pos:])
             if re.sub(r'(?m)[ \n\t]+', '', slide[end_pos:]):
                 raise Exception(
                     'Управляющая конструкция /speech должна находиться в конце описания слайда!'

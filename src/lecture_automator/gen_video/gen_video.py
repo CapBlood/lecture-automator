@@ -26,4 +26,6 @@ def generate_video(path_images: List[str], path_wavs: List[str],
     ffmpeg.output(
         joined[0], joined[1], output_name,
         f=vformat, vcodec=vcodec, acodec=acodec
-    ).run(overwrite_output=True)
+    ).run(overwrite_output=True,
+          capture_stdout=True,
+          capture_stderr=True)

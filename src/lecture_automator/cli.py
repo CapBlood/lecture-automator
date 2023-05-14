@@ -1,6 +1,8 @@
 import click
+from ffmpeg._run import Error as FFmpegError
 
 from lecture_automator.compiler import compile_text_md
+from lecture_automator.marp_api.exceptions import MarpError
 from lecture_automator.web import run_web
 
 
@@ -40,10 +42,18 @@ def convert(input_md, out_path, scale, vformat):
     with open(input_md) as file:
         md_text = file.read()
 
-    compile_text_md(
-        md_text, out_path=out_path,
-        vformat=vformat, scale=scale
-    )
+    try:
+        compile_text_md(
+            md_text, out_path=out_path,
+            vformat=vformat, scale=scale,
+            verbose_progress=True
+        )
+    except FFmpegError as e:
+        print('Ошибка ffmpeg:')
+        print(e.stderr.decode())
+    except MarpError as e:
+        print('Ошибка Marp:')
+        print(e.stderr.decode())
 
 
 @cli.command()

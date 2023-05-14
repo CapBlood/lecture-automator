@@ -1,6 +1,6 @@
 import os
 
-from lecture_automator.marp_api import generate_marp_slides
+from lecture_automator.marp_api.marp_api import generate_marp_slides
 
 pytest_plugins = ["pytester"]
 
