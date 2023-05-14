@@ -20,7 +20,8 @@ def generate_marp_slides(outdir: str, md_text: str, type_images: str = 'png', sc
             file.write(md_text)
 
         process = subprocess.Popen(
-            ['marp', '--images', type_images, '--image-scale', str(scale), '-o', 'Slide.png', path_to_md],
+            ['marp', '--images', type_images, '--image-scale', str(scale),
+             '-o', 'Slide.png', path_to_md],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
