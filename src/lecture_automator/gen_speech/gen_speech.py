@@ -31,7 +31,7 @@ def generate_speech(model, text: str, out_path: str, device: str = 'cpu') -> str
     model.to(device)
 
     model.save_wav(
-        text=text,
+        ssml_text=text,
         speaker=SPEAKER,
         audio_path=out_path,
         sample_rate=SAMPLE_RATE
@@ -65,6 +65,10 @@ def get_model(model_name: str):
     return model
 
 
+def preprocess_ssml_text(text: str) -> str:
+    return '<speak>{}</speak>'.format(text)
+
+
 def text_to_speech(text: str, out_path: str, device: str = 'cpu') -> str:
     """Синтез речи.
 
@@ -84,6 +88,7 @@ def text_to_speech(text: str, out_path: str, device: str = 'cpu') -> str:
         texts = divide_text(text, max_length=MAX_SYMBOLS)
     else:
         texts = [text]
+    texts = list(map(preprocess_ssml_text, texts))
 
     with tempfile.TemporaryDirectory() as tmpdirname:
         temp_wavs = []
