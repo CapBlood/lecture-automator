@@ -1,4 +1,4 @@
-<div style="text-align:center"><img width="200" 
+<div align="center"><img width="200" 
         height="200" src="assets/book-with-gear.png" /></div>
 
 # Lecture Automator
