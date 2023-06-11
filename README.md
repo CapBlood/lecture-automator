@@ -1,3 +1,6 @@
+<div style="text-align:center"><img width="200" 
+        height="200" src="assets/book-with-gear.png" /></div>
+
 # Lecture Automator
 
 Lecture Automator позволяет автоматически генерировать презентации с озвучкой для каждого из слайдов. Всё, что вам нужно сделать - написать текстовый файл Markdown со специальной разметкой, а остальное за вас сделает Lecture Automator.
