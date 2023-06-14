@@ -11,8 +11,7 @@ from lecture_automator.parser.parser import parse_md
 
 
 def compile_text_md(input_text_md: str, out_path: str,
-                    vformat: str='mp4', scale: int=1,
-                    verbose_progress: bool=False) -> None:
+                    scale: int=1, verbose_progress: bool=False) -> None:
     md_data = parse_md(input_text_md)
 
     with tqdm(total=3, desc='Генерируем видео',
@@ -26,5 +25,5 @@ def compile_text_md(input_text_md: str, out_path: str,
             audio_paths = texts_to_speeches(md_data['speech'], tmpdirname)
             bar.update(1)
 
-            generate_video(slide_images, audio_paths, out_path, vformat=vformat)
+            generate_video(slide_images, audio_paths, out_path)
             bar.update(1)

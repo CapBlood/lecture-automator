@@ -1,2 +1,0 @@
-class IncorrectVideoFormat(Exception):
-    pass

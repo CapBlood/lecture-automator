@@ -21,14 +21,6 @@ def cli():
     type=click.STRING,
 )
 @click.option(
-    '--vformat',
-    type=click.Choice(['mp4', 'webm']),
-    default='mp4',
-    help=(
-        'Формат генерируемого видео.'
-    )
-)
-@click.option(
     '--scale',
     type=click.FLOAT,
     default=1.5,
@@ -38,14 +30,14 @@ def cli():
         'значение 1 соответствует разрешению 1280x720.'
     )
 )
-def convert(input_md, out_path, scale, vformat):
+def convert(input_md, out_path, scale):
     with open(input_md) as file:
         md_text = file.read()
 
     try:
         compile_text_md(
             md_text, out_path=out_path,
-            vformat=vformat, scale=scale,
+            scale=scale,
             verbose_progress=True
         )
     except FFmpegError as e:

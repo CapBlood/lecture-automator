@@ -1,12 +1,10 @@
 from typing import List
 
-import ffmpeg
-
-from lecture_automator.gen_video.utils import get_codecs
+from moviepy.editor import AudioFileClip, ImageClip, concatenate
 
 
 def generate_video(path_images: List[str], path_wavs: List[str],
-                   output_name: str, vformat: str='mp4') -> None:
+                   output_name: str) -> None:
     """Генерация видео на основе изображений и звука к каждому из них.
 
     Args:
@@ -16,16 +14,14 @@ def generate_video(path_images: List[str], path_wavs: List[str],
         output_name (str): название выходного видео.
     """
 
-    files = []
+    clips = []
     for path_image, path_wav in zip(path_images, path_wavs):
-        files.extend([ffmpeg.input(path_image), ffmpeg.input(path_wav)])
+        image_clip = ImageClip(path_image)
+        audio = AudioFileClip(path_wav)
+        image_clip = image_clip.set_audio(audio).set_duration(audio.duration)
+        clips.append(image_clip)
 
-    vcodec, acodec = get_codecs(vformat)
+    video = concatenate(clips)
 
-    joined = ffmpeg.concat(*files, v=1, a=1).node
-    ffmpeg.output(
-        joined[0], joined[1], output_name,
-        f=vformat, vcodec=vcodec, acodec=acodec
-    ).run(overwrite_output=True,
-          capture_stdout=True,
-          capture_stderr=True)
+    video.write_videofile(
+        output_name, fps=24, logger=None)
