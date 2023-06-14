@@ -19,8 +19,8 @@ def compile_text_md(input_text_md: str, out_path: str,
               bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt}',
               disable=not verbose_progress) as bar:
         with tempfile.TemporaryDirectory() as tmpdirname:
-            generate_marp_slides(tmpdirname, md_data['md_text'], scale=scale)
-            slide_images = glob.glob(os.path.join(tmpdirname, 'Slide.*'))
+            slide_images = generate_marp_slides(
+                tmpdirname, md_data['md_text'], scale=scale)
             bar.update(1)
 
             audio_paths = texts_to_speeches(md_data['speech'], tmpdirname)

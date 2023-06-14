@@ -1,3 +1,4 @@
+import glob
 import os
 import subprocess
 import tempfile
@@ -32,6 +33,11 @@ def generate_marp_slides(outdir: str, md_text: str, type_images: str = 'png', sc
         retcode = process.poll()
         if retcode:
             raise MarpError(out, err)
+
+    slide_images = glob.glob(os.path.join(outdir, 'Slide.*'))
+    sorted_slide_images = sorted(slide_images, key=lambda p: os.path.basename(p))
+
+    return sorted_slide_images
 
 
 if __name__ == '__main__':
