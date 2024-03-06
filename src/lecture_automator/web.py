@@ -23,7 +23,7 @@ def main_page() -> None:
         with st.spinner('Генерируем...'):
             out_path = os.path.join(storage_path, 'Video.webm')
             compile_text_md(
-                text, out_path=out_path, vformat='webm')
+                text, out_path=out_path)
         st.video(out_path)
 
 
